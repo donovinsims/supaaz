@@ -4,35 +4,63 @@ import { Bookmark, Globe, Clock, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
 
-async function getStats(userId: string) {
-  const supabase = await createClient();
-  
-  const [bookmarksResult, submissionsResult] = await Promise.all([
-    supabase.from("bookmarks").select("id", { count: "exact" }).eq("user_id", userId),
-    supabase.from("submissions").select("id", { count: "exact" }).eq("user_id", userId),
-  ]);
+async function getStats(userId: string): Promise<{ savedCreators: number; submittedWebsites: number }> {
+  try {
+    const supabase = await createClient();
+    
+    const [bookmarksResult, submissionsResult] = await Promise.all([
+      supabase.from("bookmarks").select("id", { count: "exact" }).eq("user_id", userId),
+      supabase.from("submissions").select("id", { count: "exact" }).eq("user_id", userId),
+    ]);
 
-  return {
-    savedCreators: bookmarksResult.count || 0,
-    submittedWebsites: submissionsResult.count || 0,
-  };
+    if (bookmarksResult.error) {
+      console.error("Error fetching bookmarks count:", bookmarksResult.error);
+    }
+    if (submissionsResult.error) {
+      console.error("Error fetching submissions count:", submissionsResult.error);
+    }
+
+    return {
+      savedCreators: bookmarksResult.count ?? 0,
+      submittedWebsites: submissionsResult.count ?? 0,
+    };
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    return { savedCreators: 0, submittedWebsites: 0 };
+  }
 }
 
-async function getRecentActivity(userId: string) {
-  const supabase = await createClient();
-  
-  const { data: bookmarks } = await supabase
-    .from("bookmarks")
-    .select("website_slug, created_at")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(5);
+interface Activity {
+  type: "bookmark";
+  slug: string;
+  createdAt: string;
+}
 
-  return (bookmarks || []).map((b) => ({
-    type: "bookmark" as const,
-    slug: b.website_slug,
-    createdAt: b.created_at,
-  }));
+async function getRecentActivity(userId: string): Promise<Activity[]> {
+  try {
+    const supabase = await createClient();
+    
+    const { data: bookmarks, error } = await supabase
+      .from("bookmarks")
+      .select("website_slug, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (error) {
+      console.error("Error fetching recent activity:", error);
+      return [];
+    }
+
+    return (bookmarks ?? []).map((b) => ({
+      type: "bookmark" as const,
+      slug: b.website_slug,
+      createdAt: b.created_at,
+    }));
+  } catch (error) {
+    console.error("Error fetching recent activity:", error);
+    return [];
+  }
 }
 
 export default async function DashboardPage() {
