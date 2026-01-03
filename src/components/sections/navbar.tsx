@@ -91,20 +91,20 @@ const Navbar = () => {
               <ThemeToggle />
             </div>
 
-            <div className="hidden sm:flex items-center gap-2">
-              <button 
-                onClick={() => setSubmitModalOpen(true)}
-                className="flex items-center gap-1.5 text-text-primary bg-ui-1 border border-border-1 px-4 py-2.5 text-[13px] font-medium rounded-[8px] hover:bg-ui-2 transition-all min-h-[44px]"
-              >
-                <Send className="w-4 h-4" />
-                Submit
-              </button>
+              <div className="hidden sm:flex items-center gap-2">
+                <button 
+                  onClick={() => setSubmitModalOpen(true)}
+                  className="flex items-center gap-1.5 text-text-primary bg-ui-1 border border-border-1 px-3 py-1.5 text-[12px] font-medium rounded-[8px] hover:bg-ui-2 transition-all"
+                >
+                  <Send className="w-4 h-4" />
+                  Submit
+                </button>
 
-              {loading ? (
-                <div className="min-w-[44px] min-h-[44px] flex items-center justify-center">
-                  <Loader2 className="w-5 h-5 animate-spin text-text-secondary" />
-                </div>
-              ) : user ? (
+                {loading ? (
+                  <div className="flex items-center justify-center px-3 py-1.5">
+                    <Loader2 className="w-4 h-4 animate-spin text-text-secondary" />
+                  </div>
+                ) : user ? (
                 <div className="relative">
                   <button
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -161,17 +161,17 @@ const Navbar = () => {
                     </>
                   )}
                 </div>
-              ) : (
-                <>
-                  <button 
-                    onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
-                    className="text-text-primary px-4 py-2.5 text-[13px] font-medium hover:text-text-primary transition-colors min-h-[44px]"
-                  >
-                    Sign in
-                  </button>
-                  <button 
-                    onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
-                    className="h-10 px-4 rounded-[10px] bg-black text-white shadow-sm text-sm font-medium transition-all hover:bg-neutral-800 disabled:opacity-50"
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                      className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
+                    >
+                      Sign in
+                    </button>
+                    <button 
+                      onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
+                    className="h-10 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-sm font-medium transition-all hover:brightness-110 disabled:opacity-50"
                   >
                     Create Account
                   </button>
@@ -299,12 +299,12 @@ const Navbar = () => {
                       >
                         Sign in
                       </button>
-                      <button 
-                        onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); setMobileMenuOpen(false); }}
-                        className="h-12 px-4 rounded-[10px] bg-black text-white shadow-sm text-[15px] font-medium transition-all hover:bg-neutral-800 disabled:opacity-50"
-                      >
-                        Create Account
-                      </button>
+                        <button 
+                          onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                          className="h-12 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-[15px] font-medium transition-all hover:brightness-110 disabled:opacity-50"
+                        >
+                          Create Account
+                        </button>
                     </div>
                   )}
                 </div>
