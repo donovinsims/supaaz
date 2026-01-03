@@ -26,6 +26,7 @@ export async function GET() {
     const users = authUsers.users.map((u) => ({
       id: u.id,
       email: u.email,
+      name: u.user_metadata?.full_name || u.user_metadata?.name || "N/A",
       created_at: u.created_at,
       last_sign_in_at: u.last_sign_in_at,
     }));

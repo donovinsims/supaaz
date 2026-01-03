@@ -30,6 +30,7 @@ interface Submission {
 interface User {
   id: string;
   email: string;
+  name: string;
   created_at: string;
   last_sign_in_at: string;
 }
@@ -225,6 +226,7 @@ export default function AdminPage() {
                 <table className="w-full text-[13px]">
                   <thead className="bg-ui-2">
                     <tr>
+                      <th className="text-left p-3 font-medium text-text-secondary">Name</th>
                       <th className="text-left p-3 font-medium text-text-secondary">Email</th>
                       <th className="text-left p-3 font-medium text-text-secondary">Signed Up</th>
                       <th className="text-left p-3 font-medium text-text-secondary">Last Sign In</th>
@@ -233,12 +235,13 @@ export default function AdminPage() {
                   <tbody className="divide-y divide-border-1 bg-ui-1">
                     {users.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="p-8 text-center text-text-secondary">No users found</td>
+                        <td colSpan={4} className="p-8 text-center text-text-secondary">No users found</td>
                       </tr>
                     ) : (
                       users.map((user) => (
                         <tr key={user.id} className="hover:bg-ui-2/50">
-                          <td className="p-3 text-text-primary">{user.email}</td>
+                          <td className="p-3 text-text-primary font-medium">{user.name}</td>
+                          <td className="p-3 text-text-secondary">{user.email}</td>
                           <td className="p-3 text-text-secondary">{formatDate(user.created_at)}</td>
                           <td className="p-3 text-text-secondary">{user.last_sign_in_at ? formatDate(user.last_sign_in_at) : "Never"}</td>
                         </tr>
