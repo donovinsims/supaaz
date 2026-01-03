@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Lock, User, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
 interface AuthModalProps {
   open: boolean;
@@ -109,13 +110,13 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
             transition={{ duration: 0.2 }}
           />
 
-          <motion.div
-            className="fixed top-[50%] left-[50%] z-[201] w-full max-w-[500px] translate-x-[-50%] translate-y-[-50%] bg-ui-1 border border-border-1 rounded-[24px] p-8 shadow-2xl"
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          >
+            <motion.div
+              className="fixed bottom-0 left-0 right-0 sm:bottom-auto sm:top-[50%] sm:left-[50%] z-[201] w-full max-w-full sm:max-w-[500px] sm:translate-x-[-50%] sm:translate-y-[-50%] bg-ui-1 border border-border-1 rounded-t-[24px] sm:rounded-[24px] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            >
             <button
               onClick={() => onOpenChange(false)}
               className="absolute top-4 right-4 p-2 text-text-secondary hover:text-text-primary transition-colors rounded-full hover:bg-ui-2"
@@ -219,7 +220,12 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
                       <button
                         type="submit"
                         disabled={loading}
-                        className="w-full h-12 bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        className={cn(
+                          "w-full h-12 shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                          mode === "signup"
+                            ? "bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A]"
+                            : "bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] sm:bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] sm:border-[#076CC4]"
+                        )}
                       >
                       {loading ? (
                         <>
