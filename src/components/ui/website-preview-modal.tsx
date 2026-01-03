@@ -66,10 +66,10 @@ export function WebsitePreviewModal({
             onClick={onClose}
           />
 
-            <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 pointer-events-none">
-              <motion.div
-                layoutId={layoutId}
-                className="w-full max-w-4xl h-[90vh] sm:h-[85vh] max-h-[900px] bg-[#1a1a1a] rounded-t-[24px] sm:rounded-[16px] overflow-hidden flex flex-col shadow-2xl pointer-events-auto border border-white/10"
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-6 pointer-events-none">
+            <motion.div
+              layoutId={layoutId}
+              className="w-full max-w-4xl h-[85vh] max-h-[900px] bg-[#1a1a1a] rounded-[16px] overflow-hidden flex flex-col shadow-2xl pointer-events-auto border border-white/10"
               transition={{
                 type: "spring",
                 stiffness: 300,

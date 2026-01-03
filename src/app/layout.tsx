@@ -4,6 +4,7 @@ import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { CategoryProvider } from "@/contexts/category-context";
+import { AuthModalProvider } from "@/contexts/auth-modal-context";
 import { PostHogProvider } from "./providers";
 import Script from "next/script";
 
@@ -31,13 +32,15 @@ export default function RootLayout({
         strategy="afterInteractive"
         data-orchids-project-id="8327a454-7780-4a77-8536-042a8f12d6e5"
       />
-      <PostHogProvider>
-        <ThemeProvider>
-          <CategoryProvider>
-            {children}
-          </CategoryProvider>
-        </ThemeProvider>
-      </PostHogProvider>
+<PostHogProvider>
+          <ThemeProvider>
+            <CategoryProvider>
+              <AuthModalProvider>
+                {children}
+              </AuthModalProvider>
+            </CategoryProvider>
+          </ThemeProvider>
+        </PostHogProvider>
 
       <VisualEditsMessenger />
     </body>

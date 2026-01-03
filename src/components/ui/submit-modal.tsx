@@ -47,7 +47,7 @@ export function SubmitModal({ open, onOpenChange }: SubmitModalProps) {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent 
         showCloseButton={false}
-        className="max-w-[500px] p-8 rounded-[24px] bg-ui-1 border border-border-1"
+        className="sm:max-w-[500px] p-6 sm:p-8 rounded-t-[24px] sm:rounded-[24px] bg-ui-1 border-t border-x sm:border border-border-1"
       >
         {status === 'success' ? (
           <div className="text-center py-8">
@@ -103,11 +103,11 @@ export function SubmitModal({ open, onOpenChange }: SubmitModalProps) {
                 <span className="text-[14px] text-text-primary">Subscribe to the weekly email</span>
               </label>
 
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="w-full h-12 bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mt-2"
-                >
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full mt-2 h-12 bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 {status === 'loading' ? 'Submitting...' : (
                   <>
                     Submit

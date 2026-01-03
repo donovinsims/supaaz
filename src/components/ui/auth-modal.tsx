@@ -31,6 +31,15 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
   const router = useRouter();
   const supabase = createClient();
 
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   React.useEffect(() => {
     setMode(defaultMode);
   }, [defaultMode]);
@@ -111,12 +120,18 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
           />
 
             <motion.div
-              className="fixed bottom-0 left-0 right-0 sm:bottom-auto sm:top-[50%] sm:left-[50%] z-[201] w-full max-w-full sm:max-w-[500px] sm:translate-x-[-50%] sm:translate-y-[-50%] bg-ui-1 border border-border-1 rounded-t-[24px] sm:rounded-[24px] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className={cn(
+                "fixed z-[201] bg-ui-1 shadow-2xl",
+                isMobile 
+                  ? "bottom-0 left-0 w-full rounded-t-[24px] border-t border-x border-border-1 p-6" 
+                  : "top-[50%] left-[50%] w-full max-w-[500px] rounded-[24px] border border-border-1 p-8"
+              )}
+              initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, x: "-50%", y: "-50%" }}
+              animate={isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1, x: "-50%", y: "-50%" }}
+              exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, x: "-50%", y: "-50%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
             >
+
             <button
               onClick={() => onOpenChange(false)}
               className="absolute top-4 right-4 p-2 text-text-secondary hover:text-text-primary transition-colors rounded-full hover:bg-ui-2"
@@ -217,16 +232,16 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
                     </motion.div>
                   )}
 
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className={cn(
-                          "w-full h-12 shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                          mode === "signup"
-                            ? "bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A]"
-                            : "bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] sm:bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] sm:border-[#076CC4]"
-                        )}
-                      >
+                          <button
+                            type="submit"
+                            disabled={loading}
+                            className={cn(
+                              "w-full h-12 text-white rounded-[10px] font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)]",
+                              mode === "signin" 
+                                ? "bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4]" 
+                                : "bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A]"
+                            )}
+                          >
                       {loading ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />

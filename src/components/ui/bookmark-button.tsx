@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Bookmark, Loader2 } from "lucide-react";
+import { useAuthModal } from "@/contexts/auth-modal-context";
 
 interface BookmarkButtonProps {
   websiteSlug: string;
@@ -16,7 +16,7 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const router = useRouter();
+  const { openAuthModal } = useAuthModal();
   const supabase = createClient();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
 
   const handleToggle = async () => {
     if (!userId) {
-      router.push("/auth/signin");
+      openAuthModal("signup");
       return;
     }
 
@@ -77,11 +77,11 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
       <button
         onClick={handleToggle}
         disabled={loading || toggling}
-        className={`p-2 rounded-[8px] transition-colors disabled:opacity-50 ${
-          isBookmarked 
-            ? "bg-primary/10 text-primary" 
-            : "bg-ui-2 hover:bg-ui-3 text-text-secondary hover:text-text-primary"
-        } ${className}`}
+          className={`p-2 rounded-[8px] transition-colors disabled:opacity-50 ${
+            isBookmarked 
+              ? "bg-primary/10 text-primary" 
+              : "bg-ui-2 hover:bg-transparent text-text-secondary hover:text-text-primary"
+          } ${className}`}
       >
         {toggling ? (
           <Loader2 className="w-4 h-4 animate-spin" />

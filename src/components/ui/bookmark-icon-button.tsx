@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bookmark, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { useAuthModal } from "@/contexts/auth-modal-context";
 
 const animations = {
   icon: {
@@ -46,7 +46,7 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
   const [loading, setLoading] = React.useState(true);
   const [toggling, setToggling] = React.useState(false);
   const [userId, setUserId] = React.useState<string | null>(null);
-  const router = useRouter();
+  const { openAuthModal } = useAuthModal();
   const supabase = createClient();
 
   React.useEffect(() => {
@@ -79,7 +79,7 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
     e.stopPropagation();
 
     if (!userId) {
-      router.push("/auth/signin");
+      openAuthModal("signup");
       return;
     }
 
@@ -105,22 +105,15 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
     setToggling(false);
   };
 
-  if (loading) {
-    return (
-      <Button variant="ghost" size="icon" disabled>
-        <Loader2 className="w-4 h-4 animate-spin opacity-40" />
-      </Button>
-    );
-  }
-
   return (
     <div className="relative flex items-center justify-center">
       <Button
         variant="ghost"
         size="icon"
         onClick={handleClick}
-        disabled={toggling}
+        disabled={loading || toggling}
         aria-pressed={isSaved}
+        className="hover:bg-transparent"
       >
         {toggling ? (
           <Loader2 className="w-4 h-4 animate-spin" />

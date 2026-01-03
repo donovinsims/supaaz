@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Mail } from 'lucide-react';
+import { Mail, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-context';
+import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
+import { cn } from '@/lib/utils';
 
 const HeroSection = () => {
   const [email, setEmail] = useState('');
@@ -42,25 +44,15 @@ const HeroSection = () => {
   return (
         <header className="w-full pt-[100px] flex flex-col bg-page transition-theme">
           <div className="container flex flex-col items-start text-left">
-          <div className="mb-6 flex items-center gap-2 px-3 py-1.5 rounded-[10px] bg-ui-3 border border-border-1">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#e6633d"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-layers"
-            >
-              <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.1 6.27a2 2 0 0 0 0 3.66l9.07 4.09a2 2 0 0 0 1.66 0l9.07-4.09a2 2 0 0 0 0-3.66z" />
-              <path d="m2.1 14.07 9.07 4.09a2 2 0 0 0 1.66 0l9.07-4.09" />
-              <path d="m2.1 10.17 9.07 4.09a2 2 0 0 0 1.66 0l9.07-4.09" />
-            </svg>
-            <span className="text-[12px] font-semibold text-text-primary tracking-wider uppercase">
-              100+ DIRECTORIES NOW!
-            </span>
+          <div
+            className={cn(
+              "group mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800",
+            )}
+          >
+            <AnimatedShinyText className="inline-flex items-center justify-center transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
+              <span className="text-[12px] font-semibold tracking-wider uppercase">✨ 100+ DIRECTORIES NOW!</span>
+              <ArrowRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+            </AnimatedShinyText>
           </div>
 
           <h1 className="text-[48px] md:text-[64px] font-bold text-text-primary leading-[1.1] tracking-[-0.02em] mb-6 max-w-[720px]">
