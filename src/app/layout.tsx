@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/contexts/theme-context";
 import { CategoryProvider } from "@/contexts/category-context";
 import { AuthModalProvider } from "@/contexts/auth-modal-context";
 import { PostHogProvider } from "./providers";
+import { AuthCodeHandler } from "@/components/auth/auth-code-handler";
 import Script from "next/script";
 
 const inter = Inter({
@@ -32,15 +33,17 @@ export default function RootLayout({
         strategy="afterInteractive"
         data-orchids-project-id="8327a454-7780-4a77-8536-042a8f12d6e5"
       />
-<PostHogProvider>
-          <ThemeProvider>
-            <CategoryProvider>
-              <AuthModalProvider>
-                {children}
-              </AuthModalProvider>
-            </CategoryProvider>
-          </ThemeProvider>
-        </PostHogProvider>
+  <PostHogProvider>
+            <ThemeProvider>
+              <CategoryProvider>
+                <AuthModalProvider>
+                  <AuthCodeHandler />
+                  {children}
+                </AuthModalProvider>
+              </CategoryProvider>
+            </ThemeProvider>
+          </PostHogProvider>
+
 
       <VisualEditsMessenger />
     </body>
