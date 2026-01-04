@@ -84,14 +84,23 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <div className="flex items-center gap-1">
-              <button className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors">
-                <Search className="w-5 h-5" />
-              </button>
-              <ThemeToggle />
-            </div>
+            <div className="flex items-center gap-1">
+                <button className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors">
+                  <Search className="w-5 h-5" />
+                </button>
+                <ThemeToggle />
+              </div>
 
-              <div className="hidden sm:flex items-center gap-2">
+              {!user && !loading && (
+                <button 
+                  onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                  className="sm:hidden text-text-primary px-4 py-2 text-[14px] font-medium rounded-[8px] bg-ui-1 hover:bg-ui-2 transition-colors mr-1"
+                >
+                  Sign in
+                </button>
+              )}
+
+                <div className="hidden sm:flex items-center gap-2">
                 <button 
                   onClick={() => setSubmitModalOpen(true)}
                   className="flex items-center gap-1.5 text-text-primary bg-ui-1 border border-border-1 px-3 py-1.5 text-[12px] font-medium rounded-[8px] hover:bg-ui-2 transition-all"

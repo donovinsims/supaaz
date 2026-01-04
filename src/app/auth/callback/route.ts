@@ -27,15 +27,14 @@ export async function GET(request: Request) {
       }
     );
 
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-  
-      if (error) {
-        console.error("Auth callback error:", error.message);
-        return NextResponse.redirect(`${origin}/auth/signin?error=${encodeURIComponent(error.message)}`);
-      }
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-      if (data.user) {
+    if (error) {
+      console.error("Auth callback error:", error.message);
+      return NextResponse.redirect(`${origin}/auth/signin?error=${encodeURIComponent(error.message)}`);
+    }
 
+    if (data.user) {
       const { data: existingProfile } = await supabase
         .from("profiles")
         .select("id")
@@ -58,14 +57,21 @@ export async function GET(request: Request) {
 
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
-
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      } else {
-        return NextResponse.redirect(`${origin}${next}`);
+      
+      let redirectUrl = `${origin}${next}`;
+      if (!isLocalEnv && forwardedHost) {
+        redirectUrl = `https://${forwardedHost}${next}`;
       }
+
+      const response = NextResponse.redirect(redirectUrl);
+      
+      // Manually copy cookies from cookieStore to response to ensure they are set
+      const allCookies = await cookieStore.getAll();
+      allCookies.forEach(cookie => {
+        response.cookies.set(cookie.name, cookie.value);
+      });
+
+      return response;
     }
   }
 
