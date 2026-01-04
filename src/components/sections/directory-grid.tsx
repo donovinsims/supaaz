@@ -94,7 +94,7 @@ const DirectoryGrid: React.FC = () => {
   }, [activeCategory, supabase]);
 
   const directories: DirectoryCardProps[] = submissions.map((submission) => ({
-    image: submission.images?.[0] || '',
+    image: submission.images?.[1] || submission.images?.[2] || submission.images?.[0] || '',
     title: submission.title,
     category: submission.category,
     href: `/website/${submission.slug}`,

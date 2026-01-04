@@ -117,21 +117,31 @@ const Navbar = () => {
                   ) : user ? (
                     <UserProfileDemo user={user} />
                   ) : (
-                    <>
-                      <button 
-                        onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
-                        className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
-                      >
-                        Sign in
-                      </button>
+                      <>
+                        <button 
+                          onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                          className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
+                        >
+                          Sign in
+                        </button>
 
-                    <button 
-                      onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
-                    className="h-10 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-sm font-medium transition-all hover:brightness-110 disabled:opacity-50"
-                  >
-                    Create Account
-                  </button>
-                </>
+                      <div className="relative">
+                                <div 
+                                  className="absolute -top-4 -right-2 transform rotate-[-12deg] font-handwriting font-bold text-[#FF7A00] text-xl pointer-events-none select-none hidden lg:block z-50"
+                                  style={{ 
+                                    fontFamily: 'var(--font-handwriting)',
+                                  }}
+                                >
+                                  its free!
+                                </div>
+                        <button 
+                          onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
+                        className="h-10 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-sm font-medium transition-all hover:brightness-110 disabled:opacity-50"
+                      >
+                        Create Account
+                      </button>
+                    </div>
+                  </>
               )}
             </div>
 

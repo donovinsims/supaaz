@@ -67,11 +67,24 @@ export const SignupCard: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full space-y-4 sm:space-y-6">
-          <button className="w-full h-12 rounded-[10px] bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-[16px] font-medium text-white transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            Create Your Account
-          </button>
-          <div className="text-center">
+          <div className="w-full space-y-4 sm:space-y-6">
+            <div className="relative">
+                    <div 
+                      className="absolute -top-5 right-0 transform rotate-[-8deg] font-handwriting font-bold text-[#FF7A00] text-2xl pointer-events-none select-none hidden sm:block z-50"
+                      style={{ 
+                        fontFamily: 'var(--font-handwriting)',
+                      }}
+                    >
+                      its free!
+                      <svg className="absolute -bottom-4 -left-6 w-8 h-8 transform rotate-[-15deg]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 7L7 17M7 17H13M7 17V11" stroke="#FF7A00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+              <button className="w-full h-12 rounded-[10px] bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-[16px] font-medium text-white transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                Create Your Account
+              </button>
+            </div>
+            <div className="text-center">
             <a href="/login" className="text-[14px] font-medium text-text-secondary underline underline-offset-4 hover:text-text-primary transition-colors">
               Sign in
             </a>

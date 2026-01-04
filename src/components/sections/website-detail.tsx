@@ -18,7 +18,7 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ submission, relatedSubmis
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const layoutId = `preview-${submission.slug}`;
 
-  const primaryImage = submission.images?.[0] || '/placeholder.png';
+  const primaryImage = submission.images?.[1] || submission.images?.[2] || submission.images?.[0] || '/placeholder.png';
 
   return (
     <div className="container pt-24 md:pt-32 pb-24">
@@ -100,20 +100,20 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ submission, relatedSubmis
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {relatedSubmissions.map((related) => (
-              <Link 
-                key={related.id} 
-                href={`/website/${related.slug}`}
-                className="group flex flex-col"
-              >
-                <div className="aspect-[1.5/1] w-full overflow-hidden rounded-[8px] border border-border-1 bg-ui-1 mb-3">
-                  <Image
-                    src={related.images?.[0] || '/placeholder.png'}
-                    alt={related.title}
-                    width={400}
-                    height={267}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
-                </div>
+                <Link 
+                  key={related.id} 
+                  href={`/website/${related.slug}`}
+                  className="group flex flex-col"
+                >
+                  <div className="aspect-[1.5/1] w-full overflow-hidden rounded-[8px] border border-border-1 bg-ui-1 mb-3">
+                    <Image
+                      src={related.images?.[1] || related.images?.[2] || related.images?.[0] || '/placeholder.png'}
+                      alt={related.title}
+                      width={400}
+                      height={267}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-[14px] font-medium text-text-primary group-hover:text-text-primary/80 transition-colors truncate">
                     {related.title}
