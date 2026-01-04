@@ -38,10 +38,10 @@ const animations = {
 };
 
 interface BookmarkIconButtonProps {
-  websiteSlug: string;
+  submissionId: string;
 }
 
-export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
+export function BookmarkIconButton({ submissionId }: BookmarkIconButtonProps) {
   const [isSaved, setIsSaved] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [toggling, setToggling] = React.useState(false);
@@ -64,7 +64,7 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
         .from("bookmarks")
         .select("id")
         .eq("user_id", user.id)
-        .eq("website_slug", websiteSlug)
+        .eq("submission_id", submissionId)
         .single();
 
       setIsSaved(!!data);
@@ -72,7 +72,7 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
     };
 
     checkBookmark();
-  }, [websiteSlug, supabase]);
+  }, [submissionId, supabase]);
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -90,14 +90,14 @@ export function BookmarkIconButton({ websiteSlug }: BookmarkIconButtonProps) {
         .from("bookmarks")
         .delete()
         .eq("user_id", userId)
-        .eq("website_slug", websiteSlug);
+        .eq("submission_id", submissionId);
       setIsSaved(false);
     } else {
       await supabase
         .from("bookmarks")
         .insert({
           user_id: userId,
-          website_slug: websiteSlug,
+          submission_id: submissionId,
         });
       setIsSaved(true);
     }

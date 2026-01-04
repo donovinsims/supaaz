@@ -20,8 +20,8 @@ interface Submission {
   tagline: string;
   description: string;
   category: string;
-  website_url: string;
-  image_url: string;
+  url: string;
+  images: string[];
   status: string;
   created_at: string;
   user_id: string;
@@ -281,20 +281,20 @@ export default function AdminPage() {
                       </tr>
                     ) : (
                       allSubmissions.map((sub) => (
-                        <tr key={sub.id} className="hover:bg-ui-2/50">
-                          <td className="p-3 text-text-primary font-medium">{sub.title}</td>
-                          <td className="p-3">
-                            <a href={sub.website_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 flex items-center gap-1">
-                              <Link className="w-3.5 h-3.5" />
-                              <span className="truncate max-w-[200px]">{sub.website_url}</span>
-                            </a>
-                          </td>
-                          <td className="p-3 text-text-secondary">{sub.category}</td>
-                          <td className="p-3">
-                            <StatusBadge status={sub.status} />
-                          </td>
-                          <td className="p-3 text-text-secondary">{formatDate(sub.created_at)}</td>
-                        </tr>
+                          <tr key={sub.id} className="hover:bg-ui-2/50">
+                            <td className="p-3 text-text-primary font-medium">{sub.title}</td>
+                            <td className="p-3">
+                              <a href={sub.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 flex items-center gap-1">
+                                <Link className="w-3.5 h-3.5" />
+                                <span className="truncate max-w-[200px]">{sub.url}</span>
+                              </a>
+                            </td>
+                            <td className="p-3 text-text-secondary">{sub.category}</td>
+                            <td className="p-3">
+                              <StatusBadge status={sub.status} />
+                            </td>
+                            <td className="p-3 text-text-secondary">{formatDate(sub.created_at)}</td>
+                          </tr>
                       ))
                     )}
                   </tbody>
@@ -338,25 +338,25 @@ function PendingSection({
 
   return (
     <div className="space-y-4">
-      {submissions.map((submission) => (
-        <div key={submission.id} className="rounded-xl border border-border-1 bg-ui-1 p-5">
-          <div className="flex gap-5">
-            {submission.image_url && (
-              <img src={submission.image_url} alt={submission.title} className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
-            )}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-[15px] font-medium text-text-primary">{submission.title}</h3>
-                  <p className="text-[13px] text-text-secondary mt-0.5">{submission.tagline}</p>
+        {submissions.map((submission) => (
+          <div key={submission.id} className="rounded-xl border border-border-1 bg-ui-1 p-5">
+            <div className="flex gap-5">
+              {submission.images && submission.images.length > 0 && (
+                <img src={submission.images[0]} alt={submission.title} className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-[15px] font-medium text-text-primary">{submission.title}</h3>
+                    <p className="text-[13px] text-text-secondary mt-0.5">{submission.tagline}</p>
+                  </div>
+                  <span className="text-[12px] text-text-secondary px-2 py-1 rounded-full bg-ui-2">{submission.category}</span>
                 </div>
-                <span className="text-[12px] text-text-secondary px-2 py-1 rounded-full bg-ui-2">{submission.category}</span>
-              </div>
-              <p className="text-[13px] text-text-secondary mt-2 line-clamp-2">{submission.description}</p>
-              <a href={submission.website_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[13px] text-blue-500 hover:text-blue-400 mt-2">
-                <ExternalLink className="w-3.5 h-3.5" />
-                {submission.website_url}
-              </a>
+                <p className="text-[13px] text-text-secondary mt-2 line-clamp-2">{submission.description}</p>
+                <a href={submission.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[13px] text-blue-500 hover:text-blue-400 mt-2">
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  {submission.url}
+                </a>
               {rejectingId === submission.id ? (
                 <div className="flex items-center gap-2 mt-4">
                   <Input placeholder="Rejection reason (optional)" value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} className="flex-1" />

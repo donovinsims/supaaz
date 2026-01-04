@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Bookmark, Globe, Clock, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
+import type { Submission, Bookmark as BookmarkType } from "@/db/schema";
 
-async function getStats(userId: string): Promise<{ savedCreators: number; submittedWebsites: number }> {
+async function getStats(userId: string): Promise<{ savedWebsites: number; submittedWebsites: number }> {
   try {
     const supabase = await createClient();
     
@@ -21,18 +22,18 @@ async function getStats(userId: string): Promise<{ savedCreators: number; submit
     }
 
     return {
-      savedCreators: bookmarksResult.count ?? 0,
+      savedWebsites: bookmarksResult.count ?? 0,
       submittedWebsites: submissionsResult.count ?? 0,
     };
   } catch (error) {
     console.error("Error fetching stats:", error);
-    return { savedCreators: 0, submittedWebsites: 0 };
+    return { savedWebsites: 0, submittedWebsites: 0 };
   }
 }
 
 interface Activity {
-  type: "bookmark";
-  slug: string;
+  type: "bookmark" | "submission";
+  submission: Submission;
   createdAt: string;
 }
 
@@ -42,7 +43,25 @@ async function getRecentActivity(userId: string): Promise<Activity[]> {
     
     const { data: bookmarks, error } = await supabase
       .from("bookmarks")
-      .select("website_slug, created_at")
+      .select(`
+        created_at,
+        submission:submissions (
+          id,
+          slug,
+          title,
+          tagline,
+          description,
+          url,
+          category,
+          framework,
+          cms,
+          images,
+          status,
+          user_id,
+          created_at,
+          updated_at
+        )
+      `)
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(5);
@@ -52,11 +71,13 @@ async function getRecentActivity(userId: string): Promise<Activity[]> {
       return [];
     }
 
-    return (bookmarks ?? []).map((b) => ({
-      type: "bookmark" as const,
-      slug: b.website_slug,
-      createdAt: b.created_at,
-    }));
+    return (bookmarks ?? [])
+      .filter((b) => b.submission)
+      .map((b) => ({
+        type: "bookmark" as const,
+        submission: b.submission as unknown as Submission,
+        createdAt: b.created_at,
+      }));
   } catch (error) {
     console.error("Error fetching recent activity:", error);
     return [];
@@ -80,7 +101,7 @@ export default async function DashboardPage() {
                    user.email?.split("@")[0] || 
                    "there";
 
-  const hasActivity = recentActivity.length > 0 || stats.savedCreators > 0 || stats.submittedWebsites > 0;
+  const hasActivity = recentActivity.length > 0 || stats.savedWebsites > 0 || stats.submittedWebsites > 0;
 
   return (
     <div className="min-h-screen bg-page">
@@ -103,9 +124,9 @@ export default async function DashboardPage() {
                 <div className="w-10 h-10 rounded-[8px] bg-blue-500/10 flex items-center justify-center">
                   <Bookmark className="w-5 h-5 text-blue-500" />
                 </div>
-                <span className="text-[13px] font-medium text-text-secondary">Saved Creators</span>
+                <span className="text-[13px] font-medium text-text-secondary">Saved Websites</span>
               </div>
-              <p className="text-3xl font-semibold text-text-primary">{stats.savedCreators}</p>
+              <p className="text-3xl font-semibold text-text-primary">{stats.savedWebsites}</p>
             </div>
 
             <div className="rounded-[12px] border border-border-1 bg-ui-1 p-5">
@@ -130,7 +151,7 @@ export default async function DashboardPage() {
                   {recentActivity.map((activity, index) => (
                     <Link
                       key={index}
-                      href={`/website/${activity.slug}`}
+                      href={`/website/${activity.submission.slug}`}
                       className="flex items-center gap-4 p-4 hover:bg-ui-2 transition-colors first:rounded-t-[12px] last:rounded-b-[12px]"
                     >
                       <div className="w-9 h-9 rounded-[8px] bg-blue-500/10 flex items-center justify-center shrink-0">
@@ -138,7 +159,7 @@ export default async function DashboardPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[14px] font-medium text-text-primary truncate">
-                          Saved {activity.slug.replace(/-/g, " ")}
+                          Saved {activity.submission.title}
                         </p>
                         <p className="text-[12px] text-text-secondary flex items-center gap-1">
                           <Clock className="w-3 h-3" />
@@ -161,16 +182,16 @@ export default async function DashboardPage() {
                 <Bookmark className="w-6 h-6 text-text-secondary" />
               </div>
               <h3 className="text-lg font-semibold text-text-primary mb-2">
-                Start exploring creators
+                Start exploring websites
               </h3>
               <p className="text-text-secondary text-[14px] mb-5 max-w-sm mx-auto">
-                Discover and save your favorite creators to build your personalized collection.
+                Discover and save your favorite websites to build your personalized collection.
               </p>
               <Link
-                href="/creators"
+                href="/"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[8px] bg-text-primary text-page text-[14px] font-medium hover:opacity-90 transition-opacity"
               >
-                Browse Creators
+                Browse Websites
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </section>

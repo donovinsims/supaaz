@@ -4,18 +4,21 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Website, getRelatedWebsites } from '@/lib/data';
+import type { Submission } from '@/db/schema';
 import { WebsitePreviewModal } from '@/components/ui/website-preview-modal';
 import { BookmarkButton } from '@/components/ui/bookmark-button';
+import { ReviewSection } from './review-section';
 
 interface WebsiteDetailProps {
-  website: Website;
+  submission: Submission;
+  relatedSubmissions: Submission[];
 }
 
-const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ website }) => {
-  const relatedWebsites = getRelatedWebsites(website.slug, 4);
+const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ submission, relatedSubmissions }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const layoutId = `preview-${website.slug}`;
+  const layoutId = `preview-${submission.slug}`;
+
+  const primaryImage = submission.images?.[0] || '/placeholder.png';
 
   return (
     <div className="container pt-24 md:pt-32 pb-24">
@@ -27,53 +30,53 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ website }) => {
                 className="relative aspect-[16/10] rounded-2xl overflow-hidden"
               >
               <Image
-                src={website.image}
-                alt={website.title}
+                src={primaryImage}
+                alt={submission.title}
                 width={1200}
                 height={800}
                 className="h-full w-full object-cover"
                 priority
               />
             </motion.div>
-            
-            {website.mobileImage && (
-              <div className="hidden md:block absolute bottom-4 right-4 w-[140px] lg:w-[180px] aspect-[9/16] rounded-[12px] overflow-hidden border border-border-1 bg-ui-1 shadow-2xl pointer-events-none">
-                <Image
-                  src={website.mobileImage}
-                  alt={`${website.title} mobile`}
-                  width={180}
-                  height={320}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            )}
           </div>
         </div>
 
         <div className="w-full lg:w-[40%] flex flex-col">
           <div className="mb-6 md:mb-8">
             <h1 className="text-[32px] md:text-[48px] lg:text-[56px] font-bold text-text-primary tracking-tight leading-[1.1] uppercase mb-2 md:mb-4">
-              {website.title}
+              {submission.title}
             </h1>
             <p className="text-[16px] md:text-[20px] text-text-secondary leading-relaxed">
-              {website.tagline}
+              {submission.tagline || submission.description}
             </p>
           </div>
 
           <div className="flex flex-col border-t border-border-1">
             <div className="flex items-center justify-between py-4 border-b border-border-1">
               <span className="text-[14px] text-text-secondary">Category:</span>
-              <span className="text-[14px] font-medium text-text-primary">{website.category}</span>
+              <span className="text-[14px] font-medium text-text-primary">{submission.category}</span>
             </div>
-            <div className="flex items-center justify-between py-4 border-b border-border-1">
-              <span className="text-[14px] text-text-secondary">Framework:</span>
-              <span className="text-[14px] font-medium text-text-primary">{website.framework}</span>
-            </div>
-            <div className="flex items-center justify-between py-4 border-b border-border-1">
-              <span className="text-[14px] text-text-secondary">CMS:</span>
-              <span className="text-[14px] font-medium text-text-primary">{website.cms}</span>
-            </div>
+            {submission.framework && (
+              <div className="flex items-center justify-between py-4 border-b border-border-1">
+                <span className="text-[14px] text-text-secondary">Framework:</span>
+                <span className="text-[14px] font-medium text-text-primary">{submission.framework}</span>
+              </div>
+            )}
+            {submission.cms && (
+              <div className="flex items-center justify-between py-4 border-b border-border-1">
+                <span className="text-[14px] text-text-secondary">CMS:</span>
+                <span className="text-[14px] font-medium text-text-primary">{submission.cms}</span>
+              </div>
+            )}
           </div>
+
+          {submission.description && (
+            <div className="mt-6">
+              <p className="text-[14px] text-text-secondary leading-relaxed">
+                {submission.description}
+              </p>
+            </div>
+          )}
 
               <div className="flex flex-col gap-3 mt-6 md:mt-8">
                 <motion.button
@@ -83,18 +86,20 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ website }) => {
                 >
                   Visit website
                 </motion.button>
-                <BookmarkButton websiteSlug={website.slug} />
+                <BookmarkButton submissionId={submission.id} />
               </div>
         </div>
       </div>
 
-      {relatedWebsites.length > 0 && (
+      <ReviewSection submissionId={submission.id} />
+
+      {relatedSubmissions.length > 0 && (
         <div className="mt-16 md:mt-24 pt-12 border-t border-border-1">
           <h2 className="text-[20px] md:text-[24px] font-bold text-text-primary mb-8">
-            More in {website.category}
+            More in {submission.category}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {relatedWebsites.map((related) => (
+            {relatedSubmissions.map((related) => (
               <Link 
                 key={related.id} 
                 href={`/website/${related.slug}`}
@@ -102,7 +107,7 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ website }) => {
               >
                 <div className="aspect-[1.5/1] w-full overflow-hidden rounded-[8px] border border-border-1 bg-ui-1 mb-3">
                   <Image
-                    src={related.image}
+                    src={related.images?.[0] || '/placeholder.png'}
                     alt={related.title}
                     width={400}
                     height={267}
@@ -127,9 +132,9 @@ const WebsiteDetail: React.FC<WebsiteDetailProps> = ({ website }) => {
         onClose={() => setIsPreviewOpen(false)}
         layoutId={layoutId}
         website={{
-          title: website.title,
-          url: website.url,
-          image: website.image,
+          title: submission.title,
+          url: submission.url,
+          image: primaryImage,
         }}
       />
     </div>

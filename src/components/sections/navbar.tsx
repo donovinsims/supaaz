@@ -9,6 +9,7 @@ import { Logo } from '@/components/ui/logo';
 import { SubmitModal } from '@/components/ui/submit-modal';
 import { AuthModal } from '@/components/ui/auth-modal';
 import { createClient } from '@/lib/supabase/client';
+import { UserProfileDemo } from '@/components/auth/user-profile-demo';
 import { User } from '@supabase/supabase-js';
 
 const Navbar = () => {
@@ -109,75 +110,21 @@ const Navbar = () => {
                   Submit
                 </button>
 
-                {loading ? (
-                  <div className="flex items-center justify-center px-3 py-1.5">
-                    <Loader2 className="w-4 h-4 animate-spin text-text-secondary" />
-                  </div>
-                ) : user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-[8px] hover:bg-ui-1 transition-colors"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-ui-3 flex items-center justify-center overflow-hidden">
-                      {user.user_metadata?.avatar_url ? (
-                        <Image
-                          src={user.user_metadata.avatar_url}
-                          alt="Avatar"
-                          width={32}
-                          height={32}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <UserIcon className="w-4 h-4 text-text-secondary" />
-                      )}
+                  {loading ? (
+                    <div className="flex items-center justify-center px-3 py-1.5">
+                      <Loader2 className="w-4 h-4 animate-spin text-text-secondary" />
                     </div>
-                  </button>
-
-                  {menuOpen && (
+                  ) : user ? (
+                    <UserProfileDemo user={user} />
+                  ) : (
                     <>
-                      <div 
-                        className="fixed inset-0 z-10" 
-                        onClick={() => setMenuOpen(false)} 
-                      />
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-ui-1 border border-border-1 rounded-[12px] shadow-xl z-20 overflow-hidden">
-                        <div className="p-3 border-b border-border-1">
-                          <p className="text-[13px] font-medium text-text-primary truncate">
-                            {user.user_metadata?.full_name || user.email?.split("@")[0]}
-                          </p>
-                          <p className="text-[11px] text-text-secondary truncate">
-                            {user.email}
-                          </p>
-                        </div>
-                        <div className="p-1">
-                          <Link
-                            href="/profile"
-                            onClick={() => setMenuOpen(false)}
-                            className="flex items-center gap-2 px-3 py-2.5 text-[13px] text-text-primary hover:bg-ui-2 rounded-[8px] transition-colors min-h-[44px]"
-                          >
-                            <UserIcon className="w-4 h-4" />
-                            Profile
-                          </Link>
-                          <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-red-500 hover:bg-ui-2 rounded-[8px] transition-colors min-h-[44px]"
-                          >
-                            <LogOut className="w-4 h-4" />
-                            Sign out
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-                ) : (
-                  <>
-                    <button 
-                      onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
-                      className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
-                    >
-                      Sign in
-                    </button>
+                      <button 
+                        onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                        className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
+                      >
+                        Sign in
+                      </button>
+
                     <button 
                       onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
                     className="h-10 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-sm font-medium transition-all hover:brightness-110 disabled:opacity-50"

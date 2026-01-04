@@ -6,12 +6,12 @@ import { Bookmark, Loader2 } from "lucide-react";
 import { useAuthModal } from "@/contexts/auth-modal-context";
 
 interface BookmarkButtonProps {
-  websiteSlug: string;
+  submissionId: string;
   variant?: "default" | "icon";
   className?: string;
 }
 
-export function BookmarkButton({ websiteSlug, variant = "default", className = "" }: BookmarkButtonProps) {
+export function BookmarkButton({ submissionId, variant = "default", className = "" }: BookmarkButtonProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
@@ -34,7 +34,7 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
         .from("bookmarks")
         .select("id")
         .eq("user_id", user.id)
-        .eq("website_slug", websiteSlug)
+        .eq("submission_id", submissionId)
         .single();
 
       setIsBookmarked(!!data);
@@ -42,7 +42,7 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
     };
 
     checkBookmark();
-  }, [websiteSlug, supabase]);
+  }, [submissionId, supabase]);
 
   const handleToggle = async () => {
     if (!userId) {
@@ -57,14 +57,14 @@ export function BookmarkButton({ websiteSlug, variant = "default", className = "
         .from("bookmarks")
         .delete()
         .eq("user_id", userId)
-        .eq("website_slug", websiteSlug);
+        .eq("submission_id", submissionId);
       setIsBookmarked(false);
     } else {
       await supabase
         .from("bookmarks")
         .insert({
           user_id: userId,
-          website_slug: websiteSlug,
+          submission_id: submissionId,
         });
       setIsBookmarked(true);
     }

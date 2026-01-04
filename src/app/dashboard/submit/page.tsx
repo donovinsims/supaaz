@@ -42,11 +42,11 @@ const STEPS = [
 
 interface FormData {
   title: string;
-  website_url: string;
+  url: string;
   category: string;
   tagline: string;
   description: string;
-  image_url: string;
+  images: string;
 }
 
 function isValidUrl(url: string): boolean {
@@ -65,11 +65,11 @@ export default function SubmitPage() {
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [formData, setFormData] = useState<FormData>({
     title: "",
-    website_url: "",
+    url: "",
     category: "",
     tagline: "",
     description: "",
-    image_url: "",
+    images: "",
   });
 
   function updateField(field: keyof FormData, value: string) {
@@ -86,10 +86,10 @@ export default function SubmitPage() {
       if (!formData.title.trim()) {
         newErrors.title = "Name is required";
       }
-      if (!formData.website_url.trim()) {
-        newErrors.website_url = "URL is required";
-      } else if (!isValidUrl(formData.website_url)) {
-        newErrors.website_url = "Please enter a valid URL (e.g., https://example.com)";
+      if (!formData.url.trim()) {
+        newErrors.url = "URL is required";
+      } else if (!isValidUrl(formData.url)) {
+        newErrors.url = "Please enter a valid URL (e.g., https://example.com)";
       }
       if (!formData.category) {
         newErrors.category = "Category is required";
@@ -106,10 +106,10 @@ export default function SubmitPage() {
     }
 
     if (currentStep === 3) {
-      if (!formData.image_url.trim()) {
-        newErrors.image_url = "Image URL is required";
-      } else if (!isValidUrl(formData.image_url)) {
-        newErrors.image_url = "Please enter a valid image URL";
+      if (!formData.images.trim()) {
+        newErrors.images = "Image URL is required";
+      } else if (!isValidUrl(formData.images)) {
+        newErrors.images = "Please enter a valid image URL";
       }
     }
 
@@ -143,6 +143,7 @@ export default function SubmitPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          images: [formData.images],
           slug,
         }),
       });
@@ -236,20 +237,20 @@ export default function SubmitPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="website_url" className="text-[13px] font-medium text-text-primary">
+                  <Label htmlFor="url" className="text-[13px] font-medium text-text-primary">
                     Website URL *
                   </Label>
                   <Input
-                    id="website_url"
+                    id="url"
                     type="url"
-                    value={formData.website_url}
-                    onChange={(e) => updateField("website_url", e.target.value)}
+                    value={formData.url}
+                    onChange={(e) => updateField("url", e.target.value)}
                     placeholder="https://example.com"
                     className="mt-1.5"
-                    aria-invalid={!!errors.website_url}
+                    aria-invalid={!!errors.url}
                   />
-                  {errors.website_url && (
-                    <p className="text-[12px] text-red-500 mt-1">{errors.website_url}</p>
+                  {errors.url && (
+                    <p className="text-[12px] text-red-500 mt-1">{errors.url}</p>
                   )}
                 </div>
 
@@ -318,66 +319,66 @@ export default function SubmitPage() {
             )}
 
             {step === 3 && (
-              <div className="space-y-5">
-                <div>
-                  <Label htmlFor="image_url" className="text-[13px] font-medium text-text-primary">
-                    Logo / Screenshot URL *
-                  </Label>
-                  <Input
-                    id="image_url"
-                    type="url"
-                    value={formData.image_url}
-                    onChange={(e) => updateField("image_url", e.target.value)}
-                    placeholder="https://example.com/logo.png"
-                    className="mt-1.5"
-                    aria-invalid={!!errors.image_url}
-                  />
-                  {errors.image_url && (
-                    <p className="text-[12px] text-red-500 mt-1">{errors.image_url}</p>
-                  )}
-                  <p className="text-[12px] text-text-secondary mt-2">
-                    Provide a direct link to the logo or a screenshot of the website.
-                  </p>
-                </div>
-
-                {formData.image_url && isValidUrl(formData.image_url) && (
-                  <div className="rounded-[8px] border border-border-1 overflow-hidden">
-                    <img
-                      src={formData.image_url}
-                      alt="Preview"
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
+                <div className="space-y-5">
+                  <div>
+                    <Label htmlFor="images" className="text-[13px] font-medium text-text-primary">
+                      Logo / Screenshot URL *
+                    </Label>
+                    <Input
+                      id="images"
+                      type="url"
+                      value={formData.images}
+                      onChange={(e) => updateField("images", e.target.value)}
+                      placeholder="https://example.com/logo.png"
+                      className="mt-1.5"
+                      aria-invalid={!!errors.images}
                     />
+                    {errors.images && (
+                      <p className="text-[12px] text-red-500 mt-1">{errors.images}</p>
+                    )}
+                    <p className="text-[12px] text-text-secondary mt-2">
+                      Provide a direct link to the logo or a screenshot of the website.
+                    </p>
                   </div>
-                )}
 
-                <div className="rounded-[8px] bg-ui-2 p-4">
-                  <h3 className="text-[14px] font-medium text-text-primary mb-2">
-                    Review Your Submission
-                  </h3>
-                  <dl className="space-y-2 text-[13px]">
-                    <div className="flex">
-                      <dt className="text-text-secondary w-24">Name:</dt>
-                      <dd className="text-text-primary">{formData.title}</dd>
+                  {formData.images && isValidUrl(formData.images) && (
+                    <div className="rounded-[8px] border border-border-1 overflow-hidden">
+                      <img
+                        src={formData.images}
+                        alt="Preview"
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
                     </div>
-                    <div className="flex">
-                      <dt className="text-text-secondary w-24">URL:</dt>
-                      <dd className="text-text-primary truncate">{formData.website_url}</dd>
-                    </div>
-                    <div className="flex">
-                      <dt className="text-text-secondary w-24">Category:</dt>
-                      <dd className="text-text-primary">{formData.category}</dd>
-                    </div>
-                    <div className="flex">
-                      <dt className="text-text-secondary w-24">Tagline:</dt>
-                      <dd className="text-text-primary">{formData.tagline}</dd>
-                    </div>
-                  </dl>
+                  )}
+
+                  <div className="rounded-[8px] bg-ui-2 p-4">
+                    <h3 className="text-[14px] font-medium text-text-primary mb-2">
+                      Review Your Submission
+                    </h3>
+                    <dl className="space-y-2 text-[13px]">
+                      <div className="flex">
+                        <dt className="text-text-secondary w-24">Name:</dt>
+                        <dd className="text-text-primary">{formData.title}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="text-text-secondary w-24">URL:</dt>
+                        <dd className="text-text-primary truncate">{formData.url}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="text-text-secondary w-24">Category:</dt>
+                        <dd className="text-text-primary">{formData.category}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="text-text-secondary w-24">Tagline:</dt>
+                        <dd className="text-text-primary">{formData.tagline}</dd>
+                      </div>
+                    </dl>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             <div className="flex items-center justify-between mt-6 pt-6 border-t border-border-1">
               <Button
