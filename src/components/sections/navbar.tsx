@@ -69,7 +69,7 @@ const Navbar = () => {
                 Catalog
               </Link>
               <Link 
-                href="/" 
+                href="/learn" 
                 className="text-text-secondary hover:text-text-primary px-3 py-1.5 text-[12px] font-medium transition-colors rounded-[8px]"
               >
                 Learn
@@ -222,7 +222,7 @@ const Navbar = () => {
                     Catalog
                   </Link>
                   <Link 
-                    href="/" 
+                    href="/learn" 
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-text-secondary px-4 py-3 text-[15px] font-medium rounded-[8px] hover:bg-ui-1 transition-colors min-h-[48px] flex items-center"
                   >
