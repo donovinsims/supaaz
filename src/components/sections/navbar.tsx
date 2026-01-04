@@ -7,15 +7,14 @@ import { Search, Send, User as UserIcon, LogOut, Loader2, X, Menu } from 'lucide
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Logo } from '@/components/ui/logo';
 import { SubmitModal } from '@/components/ui/submit-modal';
-import { AuthModal } from '@/components/ui/auth-modal';
+import { useAuthModal } from '@/contexts/auth-modal-context';
 import { createClient } from '@/lib/supabase/client';
 import { UserProfileDemo } from '@/components/auth/user-profile-demo';
 import { User } from '@supabase/supabase-js';
 
 const Navbar = () => {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const { openAuthModal } = useAuthModal();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -94,7 +93,7 @@ const Navbar = () => {
 
               {!user && !loading && (
                 <button 
-                  onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                  onClick={() => openAuthModal("signin")}
                   className="sm:hidden text-text-primary px-4 py-2 text-[14px] font-medium rounded-[8px] bg-ui-1 hover:bg-ui-2 transition-colors mr-1"
                 >
                   Sign in
@@ -119,28 +118,18 @@ const Navbar = () => {
                   ) : (
                       <>
                         <button 
-                          onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); }}
+                          onClick={() => openAuthModal("signin")}
                           className="text-text-primary px-3 py-1.5 text-[12px] font-medium hover:text-text-primary transition-colors"
                         >
                           Sign in
                         </button>
 
-                      <div className="relative">
-                                <div 
-                                  className="absolute -top-4 -right-2 transform rotate-[-12deg] font-handwriting font-bold text-[#FF7A00] text-xl pointer-events-none select-none hidden lg:block z-50"
-                                  style={{ 
-                                    fontFamily: 'var(--font-handwriting)',
-                                  }}
-                                >
-                                  its free!
-                                </div>
-                        <button 
-                          onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); }}
+                      <button 
+                          onClick={() => openAuthModal("signup")}
                         className="h-10 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-sm font-medium transition-all hover:brightness-110 disabled:opacity-50"
                       >
                         Create Account
                       </button>
-                    </div>
                   </>
               )}
             </div>
@@ -260,13 +249,13 @@ const Navbar = () => {
                   ) : (
                     <div className="flex flex-col gap-2">
                       <button 
-                        onClick={() => { setAuthMode("signin"); setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                        onClick={() => { openAuthModal("signin"); setMobileMenuOpen(false); }}
                         className="text-text-primary px-4 py-3 text-[15px] font-medium rounded-[8px] bg-ui-1 hover:bg-ui-2 transition-colors min-h-[48px]"
                       >
                         Sign in
                       </button>
                         <button 
-                          onClick={() => { setAuthMode("signup"); setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                          onClick={() => { openAuthModal("signup"); setMobileMenuOpen(false); }}
                           className="h-12 px-4 rounded-[10px] bg-[linear-gradient(180deg,#FF6B9D_0%,#F94C8C_100%)] border border-[#E03A7A] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-white text-[15px] font-medium transition-all hover:brightness-110 disabled:opacity-50"
                         >
                           Create Account
@@ -279,7 +268,6 @@ const Navbar = () => {
           )}
       </div>
       <SubmitModal open={submitModalOpen} onOpenChange={setSubmitModalOpen} />
-        <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} defaultMode={authMode} />
     </div>
   );
 };

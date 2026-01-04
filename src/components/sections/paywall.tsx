@@ -3,10 +3,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Monitor, Bookmark, Percent, Smile } from 'lucide-react';
+import { useAuthModal } from '@/contexts/auth-modal-context';
 
 export const SignupCard: React.FC = () => {
+  const { openAuthModal } = useAuthModal();
+
   return (
-    <div className="relative z-20 mx-auto w-full max-w-[480px] overflow-hidden rounded-[16px] border border-border-1 bg-ui-1/80 p-6 shadow-2xl backdrop-blur-2xl sm:p-10 md:p-12">
+    <div className="relative z-20 mx-auto w-full max-w-[480px] overflow-hidden rounded-[16px] border border-border-1 bg-ui-1/95 p-6 shadow-2xl backdrop-blur-2xl sm:p-10 md:p-12">
       <div className="flex flex-col items-center text-center">
         <h2 className="mb-4 text-[26px] sm:text-[32px] font-bold uppercase tracking-tight text-text-primary leading-tight">
           Unlock Everything
@@ -80,14 +83,20 @@ export const SignupCard: React.FC = () => {
                         <path d="M17 7L7 17M7 17H13M7 17V11" stroke="#FF7A00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
-              <button className="w-full h-12 rounded-[10px] bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-[16px] font-medium text-white transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <button 
+                onClick={() => openAuthModal("signup")}
+                className="w-full h-12 rounded-[10px] bg-[linear-gradient(180deg,#03A2FE_0%,#0190FF_100%)] border border-[#076CC4] shadow-[inset_0_1.5px_0_1px_rgba(255,255,255,0.24)] text-[16px] font-medium text-white transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 Create Your Account
               </button>
             </div>
             <div className="text-center">
-            <a href="/login" className="text-[14px] font-medium text-text-secondary underline underline-offset-4 hover:text-text-primary transition-colors">
+            <button 
+              onClick={() => openAuthModal("signin")}
+              className="text-[14px] font-medium text-text-secondary underline underline-offset-4 hover:text-text-primary transition-colors"
+            >
               Sign in
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -97,9 +106,17 @@ export const SignupCard: React.FC = () => {
 
 export const Paywall: React.FC = () => {
   return (
-    <div className="relative -mt-[450px] sm:-mt-[520px] w-full pt-[100px] min-h-[600px]">
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-page via-page/95 to-transparent backdrop-blur-[40px] [mask-image:linear-gradient(to_bottom,transparent,black_120px)]" />
-      <div className="container relative z-20 mx-auto px-6 pb-10">
+    <div 
+      className="relative -mt-[800px] sm:-mt-[1400px] w-full pt-[200px] min-h-[1100px] sm:min-h-[1600px] flex flex-col justify-end [--mask-start:250px] sm:[--mask-start:500px] [--mask-end:650px] sm:[--mask-end:1000px]"
+    >
+      <div 
+        className="absolute inset-0 z-10 bg-gradient-to-t from-page via-page/98 via-page/95 via-page/90 to-transparent backdrop-blur-[64px]" 
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent, transparent var(--mask-start), rgba(0,0,0,0.1) calc(var(--mask-start) + 20px), rgba(0,0,0,0.4) calc(var(--mask-start) + 80px), rgba(0,0,0,0.8) calc(var(--mask-start) + 180px), black var(--mask-end), black 900px)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, transparent var(--mask-start), rgba(0,0,0,0.1) calc(var(--mask-start) + 20px), rgba(0,0,0,0.4) calc(var(--mask-start) + 80px), rgba(0,0,0,0.8) calc(var(--mask-start) + 180px), black var(--mask-end), black 900px)'
+        }}
+      />
+      <div className="container relative z-20 mx-auto px-6 pb-24">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

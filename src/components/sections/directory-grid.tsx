@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Send } from 'lucide-react';
 import { Paywall } from './paywall';
 import { BookmarkIconButton } from '@/components/ui/bookmark-icon-button';
+import { SubmitModal } from '@/components/ui/submit-modal';
 import { useCategory } from '@/contexts/category-context';
 import { createClient } from '@/lib/supabase/client';
 import type { Submission } from '@/db/schema';
@@ -65,6 +66,7 @@ const DirectoryGrid: React.FC = () => {
   const { activeCategory } = useCategory();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -93,13 +95,18 @@ const DirectoryGrid: React.FC = () => {
     fetchSubmissions();
   }, [activeCategory, supabase]);
 
-  const directories: DirectoryCardProps[] = submissions.map((submission) => ({
-    image: submission.images?.[1] || submission.images?.[2] || submission.images?.[0] || '',
-    title: submission.title,
-    category: submission.category,
-    href: `/website/${submission.slug}`,
-    submissionId: submission.id,
-  }));
+  const directories: DirectoryCardProps[] = submissions.map((submission) => {
+    const isSpecial = submission.title === 'Rows' || submission.title === 'Polar';
+    return {
+      image: isSpecial 
+        ? (submission.images?.[2] || submission.images?.[1] || submission.images?.[0] || '')
+        : (submission.images?.[1] || submission.images?.[2] || submission.images?.[0] || ''),
+      title: submission.title,
+      category: submission.category,
+      href: `/website/${submission.slug}`,
+      submissionId: submission.id,
+    };
+  });
 
   if (loading) {
     return (
@@ -122,10 +129,18 @@ const DirectoryGrid: React.FC = () => {
     return (
       <section className="bg-page pb-4 pt-2 transition-theme">
         <div className="container">
-          <div className="text-center py-16">
-            <p className="text-text-secondary text-[15px]">No websites found in this category yet.</p>
+          <div className="text-center py-24 border border-dashed border-border-1 rounded-[16px] bg-ui-1/20">
+            <p className="text-text-secondary text-[16px] mb-6">No websites found in this category yet.</p>
+            <button 
+              onClick={() => setSubmitModalOpen(true)}
+              className="inline-flex items-center gap-2 text-text-primary bg-ui-1 border border-border-1 px-5 py-2.5 text-[14px] font-medium rounded-[10px] hover:bg-ui-2 transition-all shadow-sm"
+            >
+              <Send className="w-4 h-4" />
+              Submit an App
+            </button>
           </div>
         </div>
+        <SubmitModal open={submitModalOpen} onOpenChange={setSubmitModalOpen} />
       </section>
     );
   }
@@ -133,7 +148,7 @@ const DirectoryGrid: React.FC = () => {
   return (
     <section className="bg-page pb-4 pt-2 transition-theme">
       <div className="container">
-        <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 min-h-[400px] sm:min-h-[600px]">
           {directories.slice(0, 32).map((item, index) => (
             <div 
               key={item.submissionId} 
