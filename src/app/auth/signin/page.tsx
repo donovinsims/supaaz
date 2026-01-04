@@ -36,19 +36,6 @@ export default function SignInPage() {
     router.refresh();
   };
 
-  const handleOAuthSignIn = async (provider: "google" | "twitter") => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-page flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-[400px]">
@@ -62,7 +49,7 @@ export default function SignInPage() {
 
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button
-            onClick={() => handleOAuthSignIn("google")}
+            type="button"
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-ui-1 border border-border-1 rounded-[10px] text-text-primary text-[14px] font-medium hover:bg-ui-2 transition-colors"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -86,7 +73,7 @@ export default function SignInPage() {
             Google
           </button>
           <button
-            onClick={() => handleOAuthSignIn("twitter")}
+            type="button"
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-ui-1 border border-border-1 rounded-[10px] text-text-primary text-[14px] font-medium hover:bg-ui-2 transition-colors"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">

@@ -19,7 +19,7 @@ export default function CategoryTabs() {
   const { activeCategory: activeTab, setActiveCategory: setActiveTab } = useCategory();
 
   return (
-    <section className="w-full bg-page transition-theme pt-2 pb-4 relative z-[60]">
+    <section className="w-full bg-page transition-theme pt-2 pb-4 relative z-10">
       <div className="container">
         <div className="relative">
           <div 

@@ -131,27 +131,25 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
     setLoading(false);
   };
 
-  const handleOAuthSignIn = async (provider: 'google' | 'twitter') => {
-    setError("");
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    }
-  };
-
   const switchMode = () => {
     setMode(mode === "signin" ? "signup" : "signin");
     setError("");
     setSuccess(false);
   };
 
-  const modalContent = (
+    React.useEffect(() => {
+      if (open) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }, [open]);
+
+    const modalContent = (
+
     <AnimatePresence>
       {open && (
         <>
@@ -307,24 +305,22 @@ export function AuthModal({ open, onOpenChange, defaultMode = "signin" }: AuthMo
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => handleOAuthSignIn('google')}
-                    className="flex items-center justify-center gap-2 h-12 bg-ui-2 border border-border-1 text-text-primary rounded-[12px] text-[14px] font-medium hover:bg-ui-3 transition-all"
-                  >
-                    <GoogleIcon className="w-5 h-5" />
-                    Google
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleOAuthSignIn('twitter')}
-                    className="flex items-center justify-center gap-2 h-12 bg-ui-2 border border-border-1 text-text-primary rounded-[12px] text-[14px] font-medium hover:bg-ui-3 transition-all"
-                  >
-                    <XIcon className="w-5 h-5" />
-                    X
-                  </button>
-                </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center gap-2 h-12 bg-ui-2 border border-border-1 text-text-primary rounded-[12px] text-[14px] font-medium hover:bg-ui-3 transition-all"
+                    >
+                      <GoogleIcon className="w-5 h-5" />
+                      Google
+                    </button>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center gap-2 h-12 bg-ui-2 border border-border-1 text-text-primary rounded-[12px] text-[14px] font-medium hover:bg-ui-3 transition-all"
+                    >
+                      <XIcon className="w-5 h-5" />
+                      X
+                    </button>
+                  </div>
 
                 <div className="mt-6 text-center">
                   <p className="text-text-secondary text-[13px]">

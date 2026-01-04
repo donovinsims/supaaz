@@ -43,6 +43,17 @@ export function SubmitModal({ open, onOpenChange }: SubmitModalProps) {
     setStatus('idle')
   }
 
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent 

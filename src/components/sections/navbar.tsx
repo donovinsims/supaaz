@@ -21,8 +21,20 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const supabase = createClient();
 
-  useEffect(() => {
-    const getUser = async () => {
+    useEffect(() => {
+      if (mobileMenuOpen) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }, [mobileMenuOpen]);
+
+    useEffect(() => {
+      const getUser = async () => {
+
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
       setLoading(false);
