@@ -40,7 +40,7 @@ export default function SignUpPage() {
     }
 
     if (data.user) {
-      await supabase.from("profiles").insert({
+      await supabase.from("users").insert({
         id: data.user.id,
         email: data.user.email,
         full_name: fullName,

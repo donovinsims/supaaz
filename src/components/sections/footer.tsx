@@ -54,24 +54,26 @@ const Footer = () => {
               </ul>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <h4 className="text-text-primary text-[16px] font-semibold">More on Stacker:</h4>
-              <ul className="flex flex-col gap-3">
-                {[
-                  { name: 'Blog', href: '/blog' },
-                  { name: 'All Categories', href: '/categories' },
-                  { name: 'Submit Directory', href: '/submit' },
-                  { name: 'Advertise', href: '/advertise' },
-                  { name: 'Disclaimer', href: '/disclaimer' }
-                ].map((item) => (
-                  <li key={item.name}>
-                    <a href={item.href} className="text-text-secondary text-[16px] hover:text-text-primary transition-colors">
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+<div className="flex flex-col gap-4">
+                <h4 className="text-text-primary text-[16px] font-semibold">More on Stacker:</h4>
+                <ul className="flex flex-col gap-3">
+                  {[
+                    { name: 'Blog', href: '/blog' },
+                    { name: 'All Categories', href: '/categories' },
+                    { name: 'Submit Directory', href: '/submit' },
+                    { name: 'Advertise', href: '/advertise' },
+                    { name: 'Disclaimer', href: '/disclaimer' },
+                    { name: 'Privacy Policy', href: '/privacy' },
+                    { name: 'Terms of Service', href: '/terms' }
+                  ].map((item) => (
+                    <li key={item.name}>
+                      <a href={item.href} className="text-text-secondary text-[16px] hover:text-text-primary transition-colors">
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
             <div className="flex flex-col gap-4">
               <h4 className="text-text-primary text-[16px] font-semibold">Check out:</h4>

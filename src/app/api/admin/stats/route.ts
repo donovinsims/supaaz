@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const [usersResult, submissionsResult, pendingResult] = await Promise.all([
-      supabase.from("profiles").select("id", { count: "exact" }),
+      supabase.from("users").select("id", { count: "exact" }),
       supabase.from("submissions").select("id", { count: "exact" }),
       supabase.from("submissions").select("id", { count: "exact" }).eq("status", "pending"),
     ]);

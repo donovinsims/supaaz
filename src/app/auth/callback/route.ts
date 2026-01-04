@@ -34,26 +34,26 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${origin}/auth/signin?error=${encodeURIComponent(error.message)}`);
     }
 
-    if (data.user) {
-      const { data: existingProfile } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("id", data.user.id)
-        .single();
+      if (data.user) {
+        const { data: existingProfile } = await supabase
+          .from("users")
+          .select("id")
+          .eq("id", data.user.id)
+          .single();
 
-      if (!existingProfile) {
-        await supabase.from("profiles").insert({
-          id: data.user.id,
-          email: data.user.email,
-          full_name:
-            data.user.user_metadata?.full_name ||
-            data.user.user_metadata?.name ||
-            data.user.email?.split("@")[0],
-          avatar_url:
-            data.user.user_metadata?.avatar_url ||
-            data.user.user_metadata?.picture,
-        });
-      }
+        if (!existingProfile) {
+          await supabase.from("users").insert({
+            id: data.user.id,
+            email: data.user.email,
+            full_name:
+              data.user.user_metadata?.full_name ||
+              data.user.user_metadata?.name ||
+              data.user.email?.split("@")[0],
+            avatar_url:
+              data.user.user_metadata?.avatar_url ||
+              data.user.user_metadata?.picture,
+          });
+        }
 
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";

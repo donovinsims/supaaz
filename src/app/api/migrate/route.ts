@@ -8,21 +8,21 @@ export async function GET() {
   );
 
   const { error: error1 } = await supabase.rpc("exec_sql", {
-    sql: "ALTER TABLE profiles ADD COLUMN IF NOT EXISTS username TEXT UNIQUE"
+    sql: "ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT UNIQUE"
   });
   
   const { error: error2 } = await supabase.rpc("exec_sql", {
-    sql: "ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT false"
+    sql: "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT false"
   });
 
   if (error1 || error2) {
     const { error: alterError1 } = await supabase
-      .from("profiles")
+      .from("users")
       .select("username")
       .limit(1);
     
     const { error: alterError2 } = await supabase
-      .from("profiles")
+      .from("users")
       .select("is_public")
       .limit(1);
     
